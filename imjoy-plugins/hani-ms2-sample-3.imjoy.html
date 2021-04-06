@@ -92,16 +92,16 @@ class ImJoyPlugin {
     const targetUrl = 'https://imjoy-s3.pasteur.fr/public/mueller-hani-ms2/sample-3/image.ome.tif'
 
     const store = await FileReferenceStore.fromUrl(refUrl, targetUrl);
-    const viewer = await api.createWindow({src: 'https://hms-dbmi.github.io/vizarr', fullscreen: true, name: 'Hani et al. SAMPLE 3'})
+    const viewer = await api.createWindow({src: 'https://hms-dbmi.github.io/vizarr', fullscreen: true, name: 'Hani et al., Sample 3'})
     const img = {
       "source": store,
-      "name": "Hani-Sample1",
+      "name": "pSPX1::MS2x128, S line",
       "channel_axis": 0,
       "axis_labels": ["Channel", "w", "h"],
       "colors": [ "00FF00", "#0000FF"],   
-      "names": ["FISH", "DAPI"],        
+      "names": ["MCP-GFP", "DAPI"],        
       "visibilities": [true, true],           
-      "contrast_limits": [[2000, 60000], [2000, 28000]], 
+      "contrast_limits": [[2000, 70000], [2000, 35000]], 
     }
     viewer.add_image(img)
   }
