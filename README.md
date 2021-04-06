@@ -4,12 +4,13 @@
 
 ## Sample 1
 
-[Click to open viewer](https://imjoy.io/lite?plugin=https://github.com/muellerflorian/hani-ms2/blob/main/imjoy-plugins/hani-ms2-sample-1.imjoy.html)
+[Click to open viewer](https://imjoy.io/lite?plugin=muellerflorian/hani-ms2:hani-ms2-sample-1)
+
 
 ## Sample 2
 
-[Click to open viewer](https://imjoy.io/lite?plugin=https://github.com/muellerflorian/hani-ms2/blob/main/imjoy-plugins/hani-ms2-sample-2.imjoy.html)
+[Click to open viewer](https://imjoy.io/lite?plugin=muellerflorian/hani-ms2:hani-ms2-sample-2)
 
 ## Sample 3
 
-[Click to open viewer](https://imjoy.io/lite?plugin=https://github.com/muellerflorian/hani-ms2/blob/main/imjoy-plugins/hani-ms2-sample-3.imjoy.html)
+[Click to open viewer](https://imjoy.io/lite?plugin=muellerflorian/hani-ms2:hani-ms2-sample-3)
