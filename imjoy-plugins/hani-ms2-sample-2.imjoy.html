@@ -1,0 +1,111 @@
+﻿<docs>
+Mosaic image from Hani et al. 
+
+Sample 2.
+</docs>
+
+<config lang="json">
+{
+  "name": "hani-ms2-sample-2",
+  "type": "web-worker",
+  "tags": [],
+  "ui": "",
+  "version": "0.1.0",
+  "cover": "",
+  "description": "Hani et al., Sample 1",
+  "icon": "extension",
+  "inputs": null,
+  "outputs": null,
+  "api_version": "0.1.8",
+  "env": "",
+  "permissions": [],
+  "requirements": ["https://unpkg.com/zarr@0.4.0/zarr.umd.js"],
+  "dependencies": []
+}
+</config>
+
+<script lang="javascript">
+
+// Using the FileReferenceStore made by Trevor Manz
+// https://observablehq.com/d/a417a770860fbb64
+class FileReferenceStore {
+  constructor(ref, target) {
+    this.ref = ref;
+    this.target = target;
+  }
+
+  _url(urlPath) {
+    if(!urlPath){
+      return this.target
+    }
+    const [protocol, path] = urlPath.split('://');
+    if (protocol === 'https' || protocol === 'http') {
+      return urlPath;
+    }
+    if (protocol === 'gc') {
+      return 'https://storage.googleapis.com/' + path;
+    }
+    throw Error("Protocol not supported, got: " + JSON.stringify(protocol));
+  }
+
+  async getItem(key) {
+    const res = this.ref[key];
+    if (!res) {
+      // Key not in store
+      throw new zarr.KeyError(key);
+    }
+   
+    if (res?.length !== 3) {
+      // JSON data entry in reference 
+      const meta = typeof res === 'string' ? res : JSON.stringify(res)
+      const enc = new TextEncoder().encode(meta);
+      return enc.buffer;
+    }
+
+    const [urlPath, offset, size] = res;
+    const url = this._url(urlPath);
+    const headers = {
+      Range: `bytes=${offset}-${offset + size - 1}`
+    };
+    const value = await fetch(url, { headers}).then(res => res.arrayBuffer());
+    return value;
+  }
+
+  containsItem(key) {
+    return key in this.ref;
+  }
+
+  static async fromUrl(url, targetUrl) {
+    const ref = await fetch(url).then(res => res.json());
+    return new FileReferenceStore(ref, targetUrl);
+  }
+}
+
+class ImJoyPlugin {
+  async setup() {
+    api.log('initialized')
+  }
+
+  async run(ctx) {
+
+    const refUrl = 'https://imjoy-s3.pasteur.fr/public/mueller-hani-ms2/sample-2/image.ome.tif_offsets.json'
+    const targetUrl = 'https://imjoy-s3.pasteur.fr/public/mueller-hani-ms2/sample-2/image.ome.tif'
+
+    const store = await FileReferenceStore.fromUrl(refUrl, targetUrl);
+    const viewer = await api.createWindow({src: 'https://hms-dbmi.github.io/vizarr', fullscreen: true, name: 'Hani et al. SAMPLE 2'})
+    const img = {
+      "source": store,
+      "name": "Hani-Sample1",
+      "channel_axis": 0,
+      "axis_labels": ["Channel", "w", "h"],
+      "colors": [ "00FF00", "#0000FF"],   
+      "names": ["FISH", "DAPI"],        
+      "visibilities": [true, true],           
+      "contrast_limits": [[60, 12000], [0, 10000]], 
+    }
+    viewer.add_image(img)
+  }
+}
+
+api.export(new ImJoyPlugin())
+</script>
