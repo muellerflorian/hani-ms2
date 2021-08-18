@@ -92,7 +92,7 @@ class ImJoyPlugin {
     const targetUrl = 'https://imjoy-s3.pasteur.fr/public/mueller-hani-ms2/sample-1/image.ome.tif'
 
     const store = await FileReferenceStore.fromUrl(refUrl, targetUrl);
-    const viewer = await api.createWindow({src: 'https://hms-dbmi.github.io/vizarr', fullscreen: true, name: 'Hani et al., Sample 1'})
+    const viewer = await api.createWindow({src: 'https://unpkg.com/@hms-dbmi/vizarr@0.2.0/index.html', fullscreen: true, name: 'Hani et al., Sample 1'})
     const img = {
       "source": store,
       "name": "pSPX1::MS2x128, S line",
